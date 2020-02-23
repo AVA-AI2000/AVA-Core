@@ -73,3 +73,12 @@ class TestBrain(unittest.TestCase):
         self.assertIsNone(ai)
 
         db_conn.close()
+
+    # def test_load_apis_success(self):
+    #     api_calls = brain.load_apis([Weather.load_api])
+    #     self.assertNotEqual(api_calls, [])
+    #     self.assertEqual(api_calls[0][1], 'weather')
+
+    def test_load_apis_fail(self):
+        api_calls = brain.load_apis([])
+        self.assertEqual(api_calls, [])
