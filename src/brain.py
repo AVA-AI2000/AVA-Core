@@ -1,11 +1,11 @@
 import yaml
 import mysql.connector as mysql
 
-from skills import AVAIO
+from skills import AVAIO, SportScores
 
 # Globals
 # Apis to load
-api_list = []
+api_list = [SportScores.load_api]
 
 
 def load_config(filename):
@@ -58,7 +58,7 @@ def load_apis(apis):
 
     for api in apis:
         funct, keys = api()
-        api_dict.append((funct, keys))
+        api_dict.append((keys, funct))
 
     return api_dict
 
