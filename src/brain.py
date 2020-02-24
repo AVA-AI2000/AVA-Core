@@ -87,7 +87,7 @@ def prefrontal_cortex(request_tokens, apis):
 def frontal_lobe(state):
     while True:
         # Current function just kill
-        state['IO'].write('Thank you for loading AVA.\n Good bye!')
+        state['IO'].write('Thank you for loading AVA.\nGood bye!', state['AI'])
         break
 
         state['IO'].write('How may I help you?')
