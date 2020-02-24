@@ -77,10 +77,36 @@ def load(config_file, IO):
     return state
 
 
+def prefrontal_cortex(request_tokens, apis):
+    for keys, funct in apis:
+        if set(keys).issubset(set(request_tokens)) or set(request_tokens).issubset(set(keys)):
+            return funct
+    return None
+
+
+def frontal_lobe(state):
+    while True:
+        # Current function just kill
+        state['IO'].write('Thank you for loading AVA.\n Good bye!')
+        break
+
+        state['IO'].write('How may I help you?')
+        request = state['IO'].read()
+        if not request:
+            continue
+        request_tokens = request.split()
+        funct = prefrontal_cortex(request_tokens, state['APIS'])
+
+        if funct is None:
+            state["IO"].write('Command was not understood.')
+            continue
+        funct(state, request_tokens)
+
+
 def main():
     IO = AVAIO.TextIO()
     state = load('../config/config.yaml', IO)
-    IO.write(state['USER']['name'])
+    frontal_lobe(state)
 
 
 main()
