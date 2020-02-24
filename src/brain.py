@@ -1,6 +1,8 @@
 import yaml
 import mysql.connector as mysql
 
+from skills import AVAIO
+
 # Globals
 # Apis to load
 api_list = []
@@ -12,7 +14,7 @@ def load_config(filename):
             yaml_data = yaml.load(filestream, Loader=yaml.FullLoader)
             return yaml_data
     except FileNotFoundError:
-        print("\nNo such config file")
+        print('\nNo such config file')
         return {}
 
 
@@ -30,7 +32,6 @@ def load_mysql(db_login):
 
 def load_user(db_conn, username):
     cursor = db_conn.cursor()
-    username = username.lower()
     cursor.execute("SELECT * FROM users where name = '%s'" % username)
     data = cursor.fetchone()
 
@@ -43,7 +44,7 @@ def load_user(db_conn, username):
 
 def load_ai(db_conn, ai_name):
     cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM ais where name = '%s'" % ai_name)
+    cursor.execute("SELECT * FROM ais where name = '% s'" % ai_name)
     data = cursor.fetchone()
 
     if not data:
@@ -60,3 +61,26 @@ def load_apis(apis):
         api_dict.append((funct, keys))
 
     return api_dict
+
+
+def load(config_file, IO):
+    config_data = load_config(config_file)
+    db_conn = load_mysql(config_data)
+
+    # TODO : Ask for username
+    username = "Kaleb"
+    user, ai_name = load_user(db_conn, username)
+    ai = load_ai(db_conn, ai_name)
+    api_lookup = load_apis(api_list)
+    state = {'USER': user, 'AI': ai, 'DB': db_conn,
+             'IO': IO, 'APIS': api_lookup, 'COMMS': []}
+    return state
+
+
+def main():
+    IO = AVAIO.TextIO()
+    state = load('../config/config.yaml', IO)
+    IO.write(state['USER']['name'])
+
+
+main()
